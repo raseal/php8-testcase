@@ -1,0 +1,24 @@
+version: '3.5'
+
+services:
+  php_8:
+    build:
+      context: etc/infrastructure/php
+      dockerfile: Dockerfile
+    container_name: php_8
+    volumes:
+      - ./:/app
+    working_dir: /app
+    ports:
+      - 9001:9000
+
+  webserver:
+    image: nginx:latest
+    container_name: nginx_server
+    ports:
+      - 8000:80
+    volumes:
+      - ./etc/infrastructure/nginx/conf.d/:/etc/nginx/conf.d
+      - ./public/:/app/public
+    depends_on:
+      - php_8
